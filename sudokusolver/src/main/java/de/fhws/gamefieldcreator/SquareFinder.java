@@ -1,11 +1,8 @@
-package de.fhws.squarefinder;
+package de.fhws.gamefieldcreator;
 
 import org.jetbrains.annotations.NotNull;
 
-import javax.swing.*;
-import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.Arrays;
 
 public class SquareFinder {
 
@@ -13,8 +10,7 @@ public class SquareFinder {
     private static final int MIN_SIZE = 170;
     private static final int MAX_SIZE = 800;
 
-    private static JFrame frame;
-    private static JLabel label;
+
 
     public static BufferedImage findSquare(BufferedImage img){
         BufferedImage result = img;
@@ -50,16 +46,6 @@ public class SquareFinder {
         return imgArray;
     }
 
-
-    public static void main(String[] args) throws AWTException, InterruptedException {
-        Thread.sleep(2000);
-        Robot robot = new Robot();
-        Rectangle rectangle = new Rectangle(0, 0, Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height);
-
-        BufferedImage img = robot.createScreenCapture(rectangle);
-        display(findSquare(img));
-    }
-
     private static boolean isSquare(boolean[][] data, int x, int y, int size) {
         for (int i = x; i < x + size ; i++) {
             if(!data[i][y])
@@ -77,19 +63,6 @@ public class SquareFinder {
     }
 
 
-    public static void display(BufferedImage image) {
-        if (frame == null) {
-            frame = new JFrame();
-            frame.setTitle("stained_image");
-            frame.setSize(image.getWidth(), image.getHeight());
-            frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-            label = new JLabel();
-            label.setIcon(new ImageIcon(image));
-            frame.getContentPane().add(label, BorderLayout.CENTER);
-            frame.setLocationRelativeTo(null);
-            frame.pack();
-            frame.setVisible(true);
-        } else label.setIcon(new ImageIcon(image));
-    }
+
 
 }
