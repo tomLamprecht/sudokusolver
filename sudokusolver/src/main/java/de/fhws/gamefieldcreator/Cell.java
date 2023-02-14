@@ -6,18 +6,25 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-public class Cell implements Comparable<Cell>{
+public class Cell implements Comparable<Cell> {
 
     private static final double PERCENTAGE = 0.20;
+
+
     private final BufferedImage img;
     private final List<Openings> openingsList = new ArrayList<>();
     private final int x, y;
+    private final int index;
+    private final List<Integer> possibilities = Stream.of(1, 2, 3, 4, 5, 6, 7, 8, 9).collect(Collectors.toList());
 
     public Cell(BufferedImage img, int x, int y) {
         this.img = img;
         this.x = x;
         this.y = y;
+        this.index = y * Splitter.SUDOKU_SIZE + x;
 
         if (hasTopOpening(img))
             openingsList.add(Openings.TOP);
@@ -27,7 +34,28 @@ public class Cell implements Comparable<Cell>{
             openingsList.add(Openings.LEFT);
         if (hasRightOpening(img))
             openingsList.add(Openings.RIGHT);
+    }
 
+    public void removePossibility(int possibility){
+        possibilities.remove(Integer.valueOf(possibility));
+    }
+
+    public void removePossibilities(List<Integer> possibilities){
+        possibilities.forEach(this::removePossibility);
+    }
+
+    public List<Integer> getPossibilities() {
+        return possibilities;
+    }
+
+    public boolean isDistinct(){
+        return possibilities.size() == 1;
+    }
+
+    public int getFinalPossibility(){
+        if(!isDistinct())
+            throw new RuntimeException("is not distinct");
+        return possibilities.get(0);
     }
 
     public List<Openings> getOpeningsList() {
@@ -44,6 +72,10 @@ public class Cell implements Comparable<Cell>{
 
     public int getY() {
         return y;
+    }
+
+    public int getIndex() {
+        return index;
     }
 
     private boolean hasTopOpening(BufferedImage img) {
@@ -104,11 +136,20 @@ public class Cell implements Comparable<Cell>{
 
     @Override
     public int compareTo(@NotNull Cell o) {
-        if(o.y < y)
+        if (o.y < y)
             return 1;
-        if(o.y == y)
+        if (o.y == y)
             return Integer.compare(x, o.x);
         return -1;
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "x=" + x +
+                ", y=" + y +
+                "index : " + index +
+                '}';
     }
 
     public enum Openings {

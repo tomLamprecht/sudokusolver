@@ -14,7 +14,7 @@ public class GroupCreator {
         List<Group> groups = new ArrayList<>();
         for (int i = 0; i < cells.length; i++) {
             for (int j = 0; j < cells[i].length; j++) {
-                Group tmp = new Group();
+                Group tmp = new Group(false);
                 tmp.addCell(cells[i][j]);
                 for (Cell.Openings opening : cells[i][j].getOpeningsList()) {
                     tmp.addCell(switch (opening) {
@@ -53,10 +53,10 @@ public class GroupCreator {
     }
 
     private static Group getGroupBlock(Cell[][] cells, int x, int y) {
-        Group group = new Group();
-        for (int i = -1; i < 1; i++) {
-            for (int j = -1; j < 1; j++) {
-                group.addCell(cells[x-i][y-i]);
+        Group group = new Group(true);
+        for (int i = -1; i <= 1; i++) {
+            for (int j = -1; j <= 1; j++) {
+                group.addCell(cells[x-i][y-j]);
             }
         }
         group.setSum(SUDOKU_MAX);
@@ -65,7 +65,7 @@ public class GroupCreator {
 
     private static void addHorizontalGroups(Cell[][] cells, List<Group> groups) {
         for (int y = 0; y < cells.length; y++) {
-            Group horizontal = new Group();
+            Group horizontal = new Group(true);
             for (int x = 0; x < cells[y].length; x++) {
                 horizontal.addCell(cells[x][y]);
             }
@@ -76,7 +76,7 @@ public class GroupCreator {
 
     private static void addVerticalGroups(Cell[][] cells, List<Group> groups) {
         for (int x = 0; x < cells.length; x++) {
-            Group vert = new Group();
+            Group vert = new Group(true);
             for (int y = 0; y < cells[x].length; y++) {
                 vert.addCell(cells[x][y]);
             }

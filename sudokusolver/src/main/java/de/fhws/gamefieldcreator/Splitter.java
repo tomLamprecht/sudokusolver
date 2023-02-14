@@ -4,20 +4,20 @@ import java.awt.image.BufferedImage;
 
 public class Splitter {
 
-    private final static int SIZE = 9;
+    public final static int SUDOKU_SIZE = 9;
 
     public static BufferedImage[][] split(BufferedImage img) {
-        double tileWidthAct = img.getWidth() / (double) (SIZE);
-        double tileHeightAct = img.getHeight() / (double) (SIZE);
+        double tileWidthAct = img.getWidth() / (double) (SUDOKU_SIZE);
+        double tileHeightAct = img.getHeight() / (double) (SUDOKU_SIZE);
         int tileWidth = (int) Math.round(tileWidthAct);
         int tileHeight = (int) Math.round(tileHeightAct);
 
-        BufferedImage[][] imageMap = new BufferedImage[SIZE][SIZE];
-        for (int i = 0; i < SIZE; i++) {
-            for (int j = 0; j < SIZE; j++) {
+        BufferedImage[][] imageMap = new BufferedImage[SUDOKU_SIZE][SUDOKU_SIZE];
+        for (int i = 0; i < SUDOKU_SIZE; i++) {
+            for (int j = 0; j < SUDOKU_SIZE; j++) {
                 int x = (int) Math.round(i * tileWidthAct);
                 int y = (int) Math.round(j * tileHeightAct);
-                imageMap[i][j] = img.getSubimage(x, y, i != SIZE - 1 ? tileWidth : img.getWidth() - x, j != SIZE - 1 ? tileHeight : img.getHeight() - y);
+                imageMap[i][j] = img.getSubimage(x, y, i != SUDOKU_SIZE - 1 ? tileWidth : img.getWidth() - x, j != SUDOKU_SIZE - 1 ? tileHeight : img.getHeight() - y);
             }
         }
         return imageMap;

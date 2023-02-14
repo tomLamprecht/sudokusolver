@@ -1,15 +1,14 @@
-package de.fhws.gamefieldcreator;
+package de.fhws;
 
-import de.fhws.OCR;
+import de.fhws.gamefieldcreator.*;
+import de.fhws.player.Player;
 import net.sourceforge.tess4j.ITesseract;
 import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -20,13 +19,21 @@ public class Main {
     private static JLabel label;
 
     public static void main(String[] args) throws AWTException, InterruptedException, IOException, TesseractException {
-        //  BufferedImage img = takeImage();
+        Thread.sleep(2000);
+          BufferedImage img = takeImage();
         ITesseract tesseract = new Tesseract();
-        BufferedImage img = ImageIO.read(new File("testData.png"));
+        //display(img);
+       // BufferedImage img = ImageIO.read(new File("testData.png"));
         img = SquareFinder.findSquare(img);
         Cell[][] cells = Splitter.createCells(img);
         List<Group> groups = GroupCreator.createGroups(cells);
+        MathSolver solver = new MathSolver(cells, groups);
+        System.out.println("solving starts...");
+        int[][] result = solver.solve();
+        Player player = new Player(result);
+        player.play();
     }
+
 
     private static BufferedImage takeImage() throws AWTException {
         Rectangle rectangle = new Rectangle(0, 0, Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height);
